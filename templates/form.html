@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Formulario de Datos de Salud</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .tabs {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .tab {
+            padding: 10px 15px;
+            background-color: #4caf50;
+            border: none;
+            cursor: pointer;
+            margin-right: 5px;
+            flex: 1 1 auto;
+            text-align: center;
+            color: white;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+        .tab.active {
+            background-color: #45a049;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        form {
+            width: 100%;
+            max-width: 600px;
+            margin: auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            margin-top: 10px;
+            display: block;
+            color: #666;
+        }
+        input[type="text"], input[type="number"] {
+            padding: 10px;
+            margin-bottom: 10px;
+            width: calc(100% - 22px);
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .button {
+            padding: 10px 20px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            flex: 1 1 auto;
+            text-align: center;
+            margin-right: 10px;
+            margin-left: 10px;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+        .button[disabled] {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        input[type="submit"] {
+            padding: 15px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        #resultado {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+        .alert {
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            display: none;
+        }
+        .alert.success {
+            background-color: #4caf50;
+            color: white;
+        }
+        .alert.danger {
+            background-color: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>🩺 Formulario de Datos de Salud 📋</h1>
+    <div class="tabs">
+        <div class="tab active" onclick="openTab(event, 'tab1')">
+            📝 Datos Generales
+        </div>
+        <div class="tab" onclick="openTab(event, 'tab2')">
+            👀 Visión y Audición
+        </div>
+        <div class="tab" onclick="openTab(event, 'tab3')">
+            💓 Presión y Colesterol
+        </div>
+        <div class="tab" onclick="openTab(event, 'tab4')">📊 Otros Datos</div>
+    </div>
+
+    <form id="formulario" onsubmit="enviarDatos(event)">
+        <div id="tab1" class="tab-content active">
+            <label for="age">👴 Edad:</label>
+            <input type="number" id="age" name="age" required />
+
+            <label for="height">📏 Altura (cm):</label>
+            <input type="number" id="height" name="height" required />
+
+            <label for="weight">⚖️ Peso (kg):</label>
+            <input type="number" id="weight" name="weight" required />
+
+            <label for="waistline">👖 Perímetro de Cintura (cm):</label>
+            <input type="number" id="waistline" name="waistline" required />
+
+            <div class="buttons">
+                <div class="button" onclick="nextTab(1)">Siguiente ➡️</div>
+            </div>
+        </div>
+
+        <div id="tab2" class="tab-content">
+            <label for="sight_left">👁️‍🗨️ Visión Izquierda:</label>
+            <input type="number" step="0.1" id="sight_left" name="sight_left" required />
+
+            <label for="sight_right">👁️‍🗨️ Visión Derecha:</label>
+            <input type="number" step="0.1" id="sight_right" name="sight_right" required />
+
+            <label for="hear_left">👂 Audición Izquierda:</label>
+            <input type="number" step="0.1" id="hear_left" name="hear_left" required />
+
+            <label for="hear_right">👂 Audición Derecha:</label>
+            <input type="number" step="0.1" id="hear_right" name="hear_right" required />
+
+            <div class="buttons">
+                <div class="button" onclick="previousTab(1)">⬅️ Anterior</div>
+                <div class="button" onclick="nextTab(1)">Siguiente ➡️</div>
+            </div>
+        </div>
+
+        <div id="tab3" class="tab-content">
+            <label for="SBP">🩸 Presión Sistólica:</label>
+            <input type="number" id="SBP" name="SBP" required />
+
+            <label for="DBP">🩸 Presión Diastólica:</label>
+            <input type="number" id="DBP" name="DBP" required />
+
+            <label for="BLDS">🩸 Azúcar en Sangre:</label>
+            <input type="number" id="BLDS" name="BLDS" required />
+
+            <label for="tot_chole">🩸 Colesterol Total:</label>
+            <input type="number" id="tot_chole" name="tot_chole" required />
+
+            <label for="HDL_chole">🩸 Colesterol HDL:</label>
+            <input type="number" id="HDL_chole" name="HDL_chole" required />
+
+            <label for="LDL_chole">🩸 Colesterol LDL:</label>
+            <input type="number" id="LDL_chole" name="LDL_chole" required />
+
+            <label for="triglyceride">🩸 Triglicéridos:</label>
+            <input type="number" id="triglyceride" name="triglyceride" required />
+
+            <div class="buttons">
+                <div class="button" onclick="previousTab(1)">⬅️ Anterior</div>
+                <div class="button" onclick="nextTab(1)">Siguiente ➡️</div>
+            </div>
+        </div>
+
+        <div id="tab4" class="tab-content">
+            <label for="hemoglobin">🔴 Hemoglobina:</label>
+            <input type="number" id="hemoglobin" name="hemoglobin" required />
+
+            <label for="urine_protein">🧪 Proteína en Orina:</label>
+            <input type="number" id="urine_protein" name="urine_protein" required />
+
+            <label for="serum_creatinine">🧪 Creatinina en Suero:</label>
+            <input type="number" step="0.1" id="serum_creatinine" name="serum_creatinine" required />
+
+            <label for="SGOT_AST">🧪 SGOT (AST):</label>
+            <input type="number" id="SGOT_AST" name="SGOT_AST" required />
+
+            <label for="SGOT_ALT">🧪 SGOT (ALT):</label>
+            <input type="number" id="SGOT_ALT" name="SGOT_ALT" required />
+
+            <label for="gamma_GTP">🧪 Gamma-GTP:</label>
+            <input type="number" id="gamma_GTP" name="gamma_GTP" required />
+
+            <label for="SMK_stat_type_cd">🚬 Código de Estado de Fumador:</label>
+            <input type="number" id="SMK_stat_type_cd" name="SMK_stat_type_cd" required />
+
+            <label for="sex">Sexo:</label>
+            <select id="sex" name="sex" required>
+                <option value="1">Femenino ♀️</option>
+                <option value="0">Masculino ♂️</option>
+            </select>
+
+            <div class="buttons">
+                <div class="button" onclick="previousTab(1)">⬅️ Anterior</div>
+            </div>
+        </div>
+        
+        <div id="resultado-alert" class="alert"></div>
+        <input type="submit" value="Enviar 📤" />
+    </form>
+    <input type="hidden" id="resultado">
+
+    <script>
+        function mostrarResultado(resultado) {
+            console.log("Resultado recibido:", resultado); 
+            var alerta = document.getElementById("resultado-alert");
+            alerta.style.display = "block";
+            if (resultado === "Y") {
+                alerta.className = "alert success";
+                alerta.innerText = "¡La predicción indica que es un bebedor!";
+            } else if (resultado === "N") {
+                alerta.className = "alert danger";
+                alerta.innerText = "¡La predicción indica que no es un bebedor!";
+            } else {
+                alerta.className = "alert";
+                alerta.innerText = "No se pudo obtener una predicción válida.";
+            }
+            document.getElementById("resultado").value = resultado;
+        }
+
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+            tablinks = document.getElementsByClassName("tab");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        function nextTab(step) {
+            var currentTab = document.querySelector(".tab-content.active");
+            var currentIndex = Array.from(document.getElementsByClassName("tab-content")).indexOf(currentTab);
+            var nextIndex = currentIndex + step;
+            var nextTab = document.getElementsByClassName("tab-content")[nextIndex];
+            currentTab.classList.remove("active");
+            nextTab.classList.add("active");
+
+            var tabs = document.getElementsByClassName("tab");
+            tabs[currentIndex].classList.remove("active");
+            tabs[nextIndex].classList.add("active");
+        }
+
+        function previousTab(step) {
+            nextTab(-step);
+        }
+
+        function enviarDatos(event) {
+            event.preventDefault();
+
+            const formData = new URLSearchParams(new FormData(event.target));
+            const sexValue = document.getElementById("sex").value;
+
+            if (sexValue === "1") {
+                formData.append("sex_Female", "1");
+                formData.append("sex_Male", "0");
+            } else {
+                formData.append("sex_Female", "0");
+                formData.append("sex_Male", "1");
+            }
+
+            fetch("/predict", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: formData.toString(),
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.error) {
+                    document.getElementById("resultado").innerText = "Error: " + data.error;
+                    console.error("Error:", data.error);
+                } else {
+                    mostrarResultado(data.prediccion);
+                }
+            })
+            .catch((error) => {
+                document.getElementById("resultado").innerText = "Error en la solicitud.";
+                console.error("Error:", error);
+            });
+        }
+    </script>
+</body>
+</html>
